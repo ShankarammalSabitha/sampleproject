@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Toilet Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f2f2f2; text-align: center; padding-top: 50px; }
+    .dashboard { background-color: #fff; padding: 20px; margin: auto; width: 300px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h1 { font-size: 24px; margin-bottom: 20px; }
+    p { font-size: 18px; margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h1>🚽 Smart Toilet Status</h1>
+    <p><strong>Availability:</strong> <span id="availability">Loading...</span></p>
+    <p><strong>Cleaning Status:</strong> <span id="cleaningStatus">Loading...</span></p>
+    <p><strong>Last Updated:</strong> <span id="timestamp">Loading...</span></p>
+  </div>
+
+  <script>
+    const apiUrl = "https://v1.nocodeapi.com/sabitha/airtable/jMwBbvvvvtMimiSF"; // Replace with your NocodeAPI URL
+
+    async function fetchData() {
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        const record = data.records[0].fields;
+
+        document.getElementById('availability').textContent = record.Availability || 'N/A';
+        document.getElementById('cleaningStatus').textContent = record.CleaningStatus || 'N/A';
+        document.getElementById('timestamp').textContent = new Date(data.records[0].createdTime).toLocaleString();
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    fetchData();
+    setInterval(fetchData, 10000); // Refresh every 10 seconds
+  </script>
+</body>
+</html>
